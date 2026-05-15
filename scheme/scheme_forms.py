@@ -32,32 +32,17 @@ def do_define_form(expressions, env):
     """
     validate_form(expressions, 2) # Checks that expressions is a list of length at least 2
     signature = expressions.first
-
     if scheme_symbolp(signature):
         # assigning a name to a value e.g. (define x (+ 1 2))
         validate_form(expressions, 2, 2) # Checks that expressions is a list of length exactly 2
-
         # BEGIN PROBLEM 4
-        value = scheme_eval(expressions.rest.first, env)
-        env.define(signature, value)
-        return signature
+        "*** YOUR CODE HERE ***"
         # END PROBLEM 4
-
     elif isinstance(signature, Link) and scheme_symbolp(signature.first):
         # defining a named procedure e.g. (define (f x y) (+ x y))
-
         # BEGIN PROBLEM 10
-        name = signature.first
-        formals = signature.rest
-        body = expressions.rest
-
-        validate_formals(formals)
-
-        procedure = LambdaProcedure(formals, body, env)
-        env.define(name, procedure)
-        return name
+        "*** YOUR CODE HERE ***"
         # END PROBLEM 10
-
     else:
         bad_signature = signature.first if isinstance(signature, Link) else signature
         raise SchemeError('non-symbol: {0}'.format(bad_signature))
@@ -70,9 +55,8 @@ def do_quote_form(expressions, env):
     Link('+', Link('x', Link(2)))
     """
     validate_form(expressions, 1, 1)
-
     # BEGIN PROBLEM 5
-    return expressions.first
+    "*** YOUR CODE HERE ***"
     # END PROBLEM 5
 
 def do_begin_form(expressions, env):
