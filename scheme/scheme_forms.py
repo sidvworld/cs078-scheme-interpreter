@@ -175,11 +175,25 @@ def make_let_frame(bindings, env):
     and a Scheme expression."""
     if not scheme_listp(bindings):
         raise SchemeError('bad bindings list in let form')
-    names = vals = nil
-    # BEGIN OPTIONAL PROBLEM 1
-    "*** YOUR CODE HERE ***"
-    # END OPTIONAL PROBLEM 1
-    return env.make_child_frame(names, vals)
+    
+    # BEGIN PROBLEM 14 - siddharth ghosh
+    map_formals = lambda binding: binding.first
+    map_vals = lambda binding: scheme_eval(binding.rest.first, env)
+
+    current = bindings
+
+    while current is not nil:
+        validate_form(current.first, 2, 2)
+        current = current.rest
+
+    formals = bindings.map(map_formals)
+
+    validate_formals(formals)
+
+    vals = bindings.map(map_vals)
+
+    # END PROBLEM #14 - siddharth ghosh
+    return env.make_child_frame(formals, vals)
 
 
 

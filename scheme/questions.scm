@@ -4,36 +4,40 @@
 (define (cdar x) (cdr (car x)))
 (define (cddr x) (cdr (cdr x)))
 
-;; Problem 14
+;; Problem 15
 ;; Returns a list of two-element lists
 (define (enumerate s)
-  ; BEGIN PROBLEM 14
-  'replace-this-line
-  ; END PROBLEM 14
+  ;; BEGIN PROBLEM 15 - siddharth ghosh (main)
+  (define (helper lst index)
+    (if (null? lst)
+        '()
+        (cons
+          (list index (car lst))
+          (helper (cdr lst) (+ index 1)))))
+
+  (helper s 0)
   )
+  ;; END PROBLEM 15 - siddharth ghosh (main)
 
-
-;; Problem 15
-
-;; Return the value for a key in a dictionary list
-(define (get dict key)
-  ; BEGIN PROBLEM 15
-  'replace-this-line
-  ; END PROBLEM 15
-  )
-
-;; Return a dictionary list with a (key value) pair
-(define (set dict key val)
-  ; BEGIN PROBLEM 15
-  'replace-this-line
-  ; END PROBLEM 15
-  )
 
 ;; Problem 16
+;; merge question
+;; START PROBLEM 16 - siddharth ghosh
+(define (merge ordered? lst1 lst2)
 
-;; implement solution-code
-(define (solution-code problem solution)
-  ; BEGIN PROBLEM 16
-  'replace-this-line
-  ; END PROBLEM 16
-  )
+  (cond
+    ((null? lst1) lst2)
+
+    ((null? lst2) lst1)
+
+    ((ordered? (car lst1) (car lst2))
+      (cons
+        (car lst1)
+        (merge ordered? (cdr lst1) lst2)))
+
+    (else
+      (cons
+        (car lst2)
+        (merge ordered? lst1 (cdr lst2))))))
+
+  ;; END PROBLEM 16 - siddharth ghosh
