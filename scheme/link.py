@@ -92,4 +92,3 @@ def map_link(f, s):
     if s is Link.empty:
         return s
     return Link(f(s.first), map_link(f, s.rest))
-

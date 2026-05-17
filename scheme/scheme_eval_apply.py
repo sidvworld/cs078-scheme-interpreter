@@ -34,9 +34,21 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
     if scheme_symbolp(first) and first in SPECIAL_FORMS:
         return SPECIAL_FORMS[first](rest, env)
     else:
-        # BEGIN PROBLEM 3
-        "*** YOUR CODE HERE ***"
-        # END PROBLEM 3
+        # BEGIN PROBLEM 3 - Tu Luong
+        procedure = scheme_eval(first, env)
+
+        def eval_operands(operands):
+            if operands is nil:
+                return nil
+            return Link(
+                scheme_eval(operands.first, env),
+                eval_operands(operands.rest)
+            )
+
+        args = eval_operands(rest)
+
+        return scheme_apply(procedure, args, env)
+        # END PROBLEM 3 - Tu Luong
 
 def scheme_apply(procedure, args, env):
     """Apply Scheme PROCEDURE to argument values ARGS (a Scheme list) in
@@ -45,23 +57,31 @@ def scheme_apply(procedure, args, env):
     if not isinstance(env, Frame):
        assert False, "Not a Frame: {}".format(env)
     if isinstance(procedure, BuiltinProcedure):
-        # BEGIN PROBLEM 2
-        "*** YOUR CODE HERE ***"
-        # END PROBLEM 2
+        # BEGIN PROBLEM 2 - Tu Luong
+        python_args = []
+        while args is not nil:
+            python_args.append(args.first)
+            args = args.rest
+        
+        if procedure.need_env:
+            python_args.append(env)
+        # END PROBLEM 2 - Tu Luong
         try:
-            # BEGIN PROBLEM 2
-            "*** YOUR CODE HERE ***"
-            # END PROBLEM 2
+            # BEGIN PROBLEM 2 - Tu Luong
+            return procedure.py_func(*python_args)
+            # END PROBLEM 2 - Tu Luong
         except TypeError as err:
             raise SchemeError('incorrect number of arguments: {0}'.format(procedure))
     elif isinstance(procedure, LambdaProcedure):
-        # BEGIN PROBLEM 9
-        "*** YOUR CODE HERE ***"
-        # END PROBLEM 9
+        # BEGIN PROBLEM 9 - Jason Chen
+        call_env = procedure.env.make_child_frame(procedure.formals, args)
+        return eval_all(procedure.body, call_env)
+        # END PROBLEM 9 - Jason Chen
     elif isinstance(procedure, MuProcedure):
-        # BEGIN PROBLEM 11
-        "*** YOUR CODE HERE ***"
-        # END PROBLEM 11
+        # BEGIN PROBLEM 11 - Juan Ventura-romero
+        call_env = env.make_child_frame(procedure.formals, args)
+        return eval_all(procedure.body, call_env)
+        # END PROBLEM 11 - Juan Ventura-romero
     else:
         assert False, "Unexpected procedure: {}".format(procedure)
 
@@ -74,9 +94,17 @@ def eval_all(expressions, env):
     >>> eval_all(read_line("(1 2)"), Frame(None))
     2
     """
-    # BEGIN PROBLEM 6
-    return scheme_eval(expressions.first, env) # replace this with lines of your own code
-    # END PROBLEM 6
+    # BEGIN PROBLEM 6  - Jason Chen
+    if expressions is nil:
+        return None
+
+    result = None
+    while expressions is not nil:
+        result = scheme_eval(expressions.first, env)
+        expressions = expressions.rest
+
+    return result
+    # END PROBLEM 6 - Jason Chen
 
 ###################################
 # Extra Challenge: Tail Recursion #
@@ -109,9 +137,6 @@ def optimize_tail_calls(unoptimized_scheme_eval):
             return Unevaluated(expr, env)
 
         result = Unevaluated(expr, env)
-        # BEGIN OPTIONAL PROBLEM 2
-        "*** YOUR CODE HERE ***"
-        # END OPTIONAL PROBLEM 2
     return optimized_eval
 
 
